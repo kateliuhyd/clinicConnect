@@ -1,0 +1,164 @@
+package edu.sjsu.dbms.clinicconnect5.dao;
+
+import edu.sjsu.dbms.clinicconnect5.configuration.JDBCConfiguration;
+import edu.sjsu.dbms.clinicconnect5.model.Doctor;
+import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+
+// Inside a method in your DatabaseConnector class
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+@Repository
+public class DoctorDAO {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private JDBCConfiguration jdbcConfiguration;
+    private ResultSet res = null;
+    private PreparedStatement s = null;
+    private Connection c = null;
+
+    public List<Doctor> searchDoctor(Integer deptId) {
+        List<Doctor> doctors = new ArrayList<>();
+
+        try {
+            c = jdbcConfiguration.getConnection();
+            String sql = "SELECT doc_id, first_name, last_name, city, specialization FROM Doctor WHERE dept_id = ?";
+            s = c.prepareStatement(sql);
+            s.setInt(1, deptId);
+            res = s.executeQuery();;
+            if (res != null) {
+                while (res.next()) {
+                    //System.out.println("\n" + res.getString(1)
+                    //        + "\t" + res.getString(2));
+                    doctors.add(new Doctor(
+                            res.getString("doc_id"),
+                            res.getString("first_name"),
+                            res.getString("last_name"),
+                            res.getString("city"),
+                            res.getString("specialization")
+                    ));
+                }
+            }
+            res.close();
+            s.close();
+            c.close();
+        } catch (SQLException E) {
+                if (res != null) {
+                    try {
+                        res.close();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            System.out.println("SQLException:" + E.getMessage());
+            System.out.println("SQLState:" + E.getSQLState());
+            System.out.println("VendorError:" + E.getErrorCode());
+        }
+        return doctors;
+    }
+
+    public void addDoctor(Doctor doctor) {
+        try {
+             c = jdbcConfiguration.getConnection();
+            String sql = "INSERT INTO doctors (doc_id, first_name, last_name, location, specialization VALUES (?, ?, ? , ? ,? )";
+            s = c.prepareStatement(sql);
+            s.setString(1, doctor.getDoc_id());
+            s.setString(2, doctor.getFirst_name());
+            s.setString(3, doctor.getLast_name());
+            s.setString(4, doctor.getLocation());
+            s.setString(5, doctor.getSpecialization());
+            s.executeUpdate();
+        }
+        catch (SQLException E) {
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            System.out.println("SQLException:" + E.getMessage());
+            System.out.println("SQLState:" + E.getSQLState());
+            System.out.println("VendorError:" + E.getErrorCode());
+        }
+    }
+
+    public void deleteDoctor(String id) {
+        try {
+            c = jdbcConfiguration.getConnection();
+            String sql = "DELETE FROM doctors WHERE id=?";
+            s = c.prepareStatement(sql);
+            s.setString(1,
+                    id);
+            s.executeUpdate();
+        }
+        catch (SQLException E) {
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            System.out.println("SQLException:" + E.getMessage());
+            System.out.println("SQLState:" + E.getSQLState());
+            System.out.println("VendorError:" + E.getErrorCode());
+        }
+    }
+
+
+    // Add review for a doctor (called from PatientDAO or here)
+    /*
+    public void addReview(int doctorId, Review review) {
+        String sql = "INSERT INTO reviews (doctor_id, patient_id, comment, rating) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, doctorId);
+            ps.setInt(2, review.getPatientId());
+            ps.setString(3, review.getComment());
+            ps.setInt(4, review.getRating());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    */
+}
