@@ -1,0 +1,44 @@
+<div class="container py-4">
+    <div class="mb-4">
+        <h1 class="h2">Book an Appointment</h1>
+        <p class="text-muted">Follow the steps below to find a doctor and book your visit.</p>
+    </div>
+
+    <!-- Department Selection -->
+    <div id="step-1-department" class="mb-4">
+        <h4><span class="badge bg-primary rounded-pill me-2">1</span> Choose a Department</h4>
+        <select id="department-select" class="form-select form-select-lg">
+            <option selected disabled>Loading departments...</option>
+        </select>
+    </div>
+
+    <!-- Doctor Selection -->
+    <div id="step-2-doctor" class="mb-4" style="display: none;">
+        <h4><span class="badge bg-primary rounded-pill me-2">2</span> Select a Doctor</h4>
+        <div id="doctor-list" class="list-group">
+            <!-- Doctors will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Date and Time Selection -->
+    <div id="step-3-availability" class="mb-4" style="display: none;">
+        <h4><span class="badge bg-primary rounded-pill me-2">3</span> Select a Date & Time for <span id="selected-doctor-name" class="fw-bold text-primary"></span></h4>
+        <input type="date" id="date-picker" class="form-control mb-3" style="max-width: 250px;">
+        <div id="time-slots-container" style="display: none;">
+            <p class="text-muted mb-2">Available slots for the selected date:</p>
+            <div id="time-slots" class="d-flex flex-wrap gap-2">
+                <!-- Available time slots will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation -->
+    <div id="step-4-confirm" class="mt-4" style="display: none;">
+        <div class="alert alert-info">
+            You have selected an appointment with <strong id="confirm-doctor"></strong> on <strong id="confirm-date"></strong> at <strong id="confirm-time"></strong>.
+        </div>
+        <button id="book-now-btn" class="btn btn-success btn-lg">
+            <i class="fas fa-check-circle me-2"></i>Confirm Booking
+        </button>
+    </div>
+</div>

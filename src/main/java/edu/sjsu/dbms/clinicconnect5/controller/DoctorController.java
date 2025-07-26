@@ -5,7 +5,6 @@ import edu.sjsu.dbms.clinicconnect5.model.Doctor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
     @RestController
@@ -21,7 +20,6 @@ import java.util.List;
 
         @GetMapping("/search")
         public List<Doctor> searchDoctor(@RequestParam int deptId) {
-
             return doctorDAO.searchDoctor(deptId);
         }
 

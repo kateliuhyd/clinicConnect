@@ -6,14 +6,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-
 // Inside a method in your DatabaseConnector class
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 @Repository
 public class DoctorDAO {
@@ -34,11 +31,9 @@ public class DoctorDAO {
             String sql = "SELECT doc_id, first_name, last_name, city, specialization FROM Doctor WHERE dept_id = ?";
             s = c.prepareStatement(sql);
             s.setInt(1, deptId);
-            res = s.executeQuery();;
+            res = s.executeQuery();
             if (res != null) {
                 while (res.next()) {
-                    //System.out.println("\n" + res.getString(1)
-                    //        + "\t" + res.getString(2));
                     doctors.add(new Doctor(
                             res.getString("doc_id"),
                             res.getString("first_name"),
@@ -84,7 +79,7 @@ public class DoctorDAO {
     public void addDoctor(Doctor doctor) {
         try {
              c = jdbcConfiguration.getConnection();
-            String sql = "INSERT INTO doctors (doc_id, first_name, last_name, location, specialization VALUES (?, ?, ? , ? ,? )";
+            String sql = "INSERT INTO doctors (doc_id, first_name, last_name, city, specialization VALUES (?, ?, ? , ? ,? )";
             s = c.prepareStatement(sql);
             s.setString(1, doctor.getDoc_id());
             s.setString(2, doctor.getFirst_name());
@@ -143,22 +138,4 @@ public class DoctorDAO {
             System.out.println("VendorError:" + E.getErrorCode());
         }
     }
-
-
-    // Add review for a doctor (called from PatientDAO or here)
-    /*
-    public void addReview(int doctorId, Review review) {
-        String sql = "INSERT INTO reviews (doctor_id, patient_id, comment, rating) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
-            ps.setInt(2, review.getPatientId());
-            ps.setString(3, review.getComment());
-            ps.setInt(4, review.getRating());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    */
 }
