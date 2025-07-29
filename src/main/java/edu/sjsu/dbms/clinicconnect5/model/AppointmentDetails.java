@@ -14,14 +14,12 @@ public class AppointmentDetails {
     public AppointmentDetails() {
     }
 
-    public AppointmentDetails(String apptId, LocalDateTime date, String doctorFirstName, String doctorLastName, String departmentName, String specialization, String status) {
+    public AppointmentDetails(String apptId, LocalDateTime date, String doctorFirstName,  String doctorLastName, String specialization) {
         this.apptId = apptId;
         this.date = date;
         this.doctorFirstName = doctorFirstName;
         this.doctorLastName = doctorLastName;
-        this.departmentName = departmentName;
         this.specialization = specialization;
-        this.status = status;
     }
 
     public String getApptId() {
@@ -70,13 +68,5 @@ public class AppointmentDetails {
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

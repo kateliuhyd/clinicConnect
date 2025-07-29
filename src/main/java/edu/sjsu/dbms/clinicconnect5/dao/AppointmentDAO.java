@@ -1,22 +1,30 @@
 package edu.sjsu.dbms.clinicconnect5.dao;
 
-import edu.sjsu.dbms.clinicconnect5.model.AppointmentRequest;
-import edu.sjsu.dbms.clinicconnect5.model.Department;
-import edu.sjsu.dbms.clinicconnect5.model.DoctorProfile;
+import edu.sjsu.dbms.clinicconnect5.configuration.JDBCConfiguration;
+import edu.sjsu.dbms.clinicconnect5.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Repository
 public class AppointmentDAO {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private JDBCConfiguration jdbcConfiguration;
+    private ResultSet res = null;
+    private PreparedStatement s = null;
+    private Connection c = null;
 
-    private final JdbcTemplate jdbcTemplate;
 
     public AppointmentDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -24,6 +32,7 @@ public class AppointmentDAO {
 
     /**
      * Fetches all departments from the database.
+     *
      * @return A list of Department objects.
      */
     public List<Department> findAllDepartments() {
@@ -37,6 +46,7 @@ public class AppointmentDAO {
 
     /**
      * Finds all doctors associated with a given department ID.
+     *
      * @param deptId The department ID to search for.
      * @return A list of DoctorProfile objects.
      */
@@ -59,8 +69,9 @@ public class AppointmentDAO {
 
     /**
      * Fetches the timestamps of all booked appointments for a specific doctor on a given date.
+     *
      * @param doctorId The ID of the doctor.
-     * @param date The date to check for appointments.
+     * @param date     The date to check for appointments.
      * @return A list of LocalDateTime objects representing booked appointment times.
      */
     public List<LocalDateTime> findBookedAppointmentTimes(String doctorId, LocalDate date) {
@@ -77,6 +88,7 @@ public class AppointmentDAO {
 
     /**
      * Creates a new appointment in the database.
+     *
      * @param request The details of the appointment to book.
      * @return The number of rows affected
      */
@@ -89,5 +101,63 @@ public class AppointmentDAO {
 
         return jdbcTemplate.update(sql, newApptId, appointmentDateTime, request.getPatientId(), request.getDocId());
     }
-}
 
+    /**
+     * @return The number of appointments a patient is currently listed for
+     */
+    public List<AppointmentDetails> viewAppointments(String patientId) {
+        List<AppointmentDetails> appts = new ArrayList<>();
+        try {
+            c = jdbcConfiguration.getConnection();
+            String sql = "SELECT A.appt_id, A.date, D.first_name, D.last_name, D.specialization FROM Appointment A, Doctor D WHERE A.doc_id = D.doc_id and A.patient_id = ?";
+            s = c.prepareStatement(sql);
+            s.setString(1, patientId);
+            res = s.executeQuery();
+            if (res != null) {
+                while (res.next()) {
+                    appts.add(new AppointmentDetails(
+                            res.getString("appt_id"),
+                            res.getTimestamp("date").toLocalDateTime(),
+                            res.getString("first_name"),
+                            res.getString("last_name"),
+                            res.getString("specialization")
+                    ));
+                }
+            }
+            res.close();
+            s.close();
+            c.close();
+        } catch (SQLException E) {
+            if (res != null) {
+                try {
+                    res.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            System.out.println("SQLException:" + E.getMessage());
+            System.out.println("SQLState:" + E.getSQLState());
+            System.out.println("VendorError:" + E.getErrorCode());
+        }
+        return appts;
+    }
+
+    //public List<AppointmentDetails> apptSummary(String patientId) {
+
+    //}
+}

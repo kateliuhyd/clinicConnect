@@ -142,12 +142,7 @@ function initBookAppointmentPage() {
                 window.location.hash = '#patient';
             },
             error: function(xhr) {
-                if (xhr.status === 409) {
-                    alert('Booking failed: This time slot was just taken. Please select another time.');
-                    datePicker.trigger('change');
-                } else {
                     alert('An error occurred while booking. Please try again.');
-                }
             }
         });
     });

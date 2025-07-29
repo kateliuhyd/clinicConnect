@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @RequestMapping("/api")
 public class AppointmentController {
 
-    private static final Logger log = LoggerFactory.getLogger(AppointmentController.class);
+
     private final AppointmentDAO appointmentDao;
 
     public AppointmentController(AppointmentDAO appointmentDao) {
@@ -39,7 +39,6 @@ public class AppointmentController {
      */
     @GetMapping("/departments")
     public ResponseEntity<List<Department>> getAllDepartments() {
-        log.info("Request received to fetch all departments");
         List<Department> departments = appointmentDao.findAllDepartments();
         return ResponseEntity.ok(departments);
     }
@@ -51,7 +50,6 @@ public class AppointmentController {
      */
     @GetMapping("/doctors/department/{deptId}")
     public ResponseEntity<List<DoctorProfile>> getDoctorsByDepartment(@PathVariable Integer deptId) {
-        log.info("Request received to fetch doctors for department ID: {}", deptId);
         List<DoctorProfile> doctors = appointmentDao.findDoctorsByDepartment(deptId);
         return ResponseEntity.ok(doctors);
     }
@@ -64,7 +62,6 @@ public class AppointmentController {
      */
     @GetMapping("/doctors/{doctorId}/availability")
     public ResponseEntity<List<String>> getDoctorAvailability(@PathVariable String doctorId, @RequestParam("date") String dateString) {
-        log.info("Fetching availability for doctor ID: {} on date: {}", doctorId, dateString);
         LocalDate date = LocalDate.parse(dateString);
 
         // Get all times that are already booked for that day.
@@ -95,7 +92,6 @@ public class AppointmentController {
      */
     @PostMapping("/appointments")
     public ResponseEntity<Void> bookAppointment(@RequestBody AppointmentRequest request) {
-        log.info("Attempting to book appointment: {}", request);
         LocalDate appointmentDate = LocalDateTime.parse(request.getAppointmentTimestamp()).toLocalDate();
 
         // 1. Check if the slot is already booked to prevent race conditions.
@@ -107,18 +103,21 @@ public class AppointmentController {
         LocalTime requestedTime = LocalDateTime.parse(request.getAppointmentTimestamp()).toLocalTime();
 
         if (bookedTimes.contains(requestedTime)) {
-            log.warn("Booking failed. Slot is already taken for doctor: {} at {}", request.getDocId(), request.getAppointmentTimestamp());
             return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
         }
 
         // 2. If the slot is free, create the appointment.
         int rowsAffected = appointmentDao.createAppointment(request);
         if (rowsAffected > 0) {
-            log.info("Successfully booked appointment for doctor: {}", request.getDocId());
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
-            log.error("Failed to insert appointment into database for doctor: {}", request.getDocId());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/getAppointments")
+    public ResponseEntity<List<AppointmentDetails>> getAppointments(@RequestParam("patientId") String patientId) {
+        List<AppointmentDetails> appts = appointmentDao.viewAppointments(patientId);
+        return ResponseEntity.ok(appts);
     }
 }

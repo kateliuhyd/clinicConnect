@@ -1,50 +1,72 @@
 package edu.sjsu.dbms.clinicconnect5.model;
 
+import java.util.Date;
+
 public class Prescription {
 
-    private int id;
-    private int patientId;
-    private String medication;
-    private String dosage;
+    private String patientId;
+    private String doctorId;
+    private String medicineName;
+    private String doctorFirstName;
+    private String doctorLastName;
+    private Date date;
 
     public Prescription() {}
 
-    public Prescription(int patientId, String medication, String dosage) {
-        this.id = id;
+    public Prescription(String medicineName, Date date, String docFirstName, String docLastName, String patientId, String doctorId) {
         this.patientId = patientId;
-        this.medication = medication;
-        this.dosage = dosage;
+        this.doctorId = doctorId;
+        this.medicineName = medicineName;
+        doctorFirstName = docFirstName;
+        doctorLastName = docLastName;
+        this.date = date;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getPatientId() {
+    public String getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(int patientId) {
+    public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
 
-    public String getMedication() {
-        return medication;
+    public String getDoctorId() {
+        return doctorId;
     }
 
-    public void setMedication(String medication) {
-        this.medication = medication;
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
     }
 
-    public String getDosage() {
-        return dosage;
+    public String getMedicineName() {
+        return medicineName;
     }
 
-    public void setDosage(String dosage) {
-        this.dosage = dosage;
+    public void setMedicineName(String medicineName) {
+        this.medicineName = medicineName;
+    }
+
+    public String getDoctorFirstName() {
+        return doctorFirstName;
+    }
+
+    public void setDoctorFirstName(String doctorFirstName) {
+        this.doctorFirstName = doctorFirstName;
+    }
+
+    public String getDoctorLastName() {
+        return doctorLastName;
+    }
+
+    public void setDoctorLastName(String doctorLastName) {
+        this.doctorLastName = doctorLastName;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

@@ -10,13 +10,19 @@ $(document).ready(function() {
         '#admin': 'pages/admin.html',
         '#doctor': 'pages/doctor.html',
         '#patient': 'pages/patient.html',
-        '#book-appointment': 'pages/book-appointment.html'
+        '#book-appointment': 'pages/book-appointment.html',
+        '#view-appointment': 'pages/patient-appointment.html',
+        '#view-prescription': 'pages/prescription.html',
+        '#view-visit-summary': 'pages/visit.html'
     };
 
     // The router will now call the initializer for the booking page directly.
     const pageInitializers = {
         '#login': initLoginPage,
-        '#book-appointment': initBookAppointmentPage
+        '#book-appointment': initBookAppointmentPage,
+        '#view-appointment': initAppointmentPage,
+        '#view-prescription': initPrescriptionPage,
+        '#view-visit-summary': initVisitPage
     };
 
     function router() {
@@ -83,8 +89,6 @@ $(document).ready(function() {
                 loginErrorDiv.text('Please enter both User ID and password.').show();
                 return;
             }
-
-            //const hashedPassword = CryptoJS.SHA256(password).toString();
 
             $.ajax({
                 url: '/api/user/login/validate',
