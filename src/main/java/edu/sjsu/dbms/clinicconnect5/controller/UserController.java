@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 import java.util.Set;
@@ -31,12 +32,17 @@ public class UserController {
      * @return A response entity containing the user's role on success, or 401 Unauthorized on failure.
      */
     @PostMapping("/login/validate")
-    public ResponseEntity<User> validateLogin(@RequestBody User request) {
+    public ResponseEntity<User> validateLogin(@RequestBody User request, HttpSession session) {
         // fetch the user from DB
         User user = userDao.findUserByEmail(request.getUserId());
 
         if (user != null && user.getPassword().equals(request.getPassword())) {
             log.info("Login validation successful for user={} and userType={}", user.getUserId(), user.getUserType());
+
+            // ✅ Store in session
+            session.setAttribute("user_id", user.getUserId());
+            session.setAttribute("user_type", user.getUserType());
+
             return ResponseEntity.ok(new User(user.getUserId(), user.getUserType()));
         } else {
             log.info("Validation failed for user={}", request.getUserId());

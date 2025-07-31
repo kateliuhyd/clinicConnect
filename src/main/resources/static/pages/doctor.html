@@ -4,6 +4,9 @@
     </div>
 
     <div class="row g-4">
+
+
+
         <!-- View Schedule Card -->
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm">
@@ -11,7 +14,11 @@
                     <i class="fas fa-calendar-alt fa-3x text-primary mb-3"></i>
                     <h5 class="card-title">My Schedule</h5>
                     <p class="card-text">View your daily and weekly appointment schedule.</p>
-                    <a href="#" class="btn btn-primary">View Schedule</a>
+<!--                    <a href="#" class="btn btn-primary" id="viewScheduleBtn">View Schedule</a>-->
+                    <!-- after click the URL change hash to #doctor-schedule -->
+                    <button type="button" class="btn btn-primary" id="viewScheduleBtn"
+                            onclick="window.location.hash='#doctor-schedule'">View Schedule
+                    </button>
                 </div>
             </div>
         </div>
@@ -41,3 +48,11 @@
         </div>
     </div>
 </div>
+</div>
+
+<script>
+    // 只是改变 hash，触发 router 加载 doctor-schedule.html
+    document
+        .getElementById('viewScheduleBtn')
+        .addEventListener('click', ()=> window.location.hash = '#doctor-schedule');
+</script>

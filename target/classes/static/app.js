@@ -8,8 +8,9 @@ $(document).ready(function() {
     const routes = {
         '#login': 'pages/login.html',
         '#admin': 'pages/admin.html',
-        '#doctor': 'pages/doctor.html',
         '#patient': 'pages/patient.html',
+        '#doctor': 'pages/doctor.html',
+        '#doctor-schedule': 'pages/doctor-schedule.html',
         '#book-appointment': 'pages/book-appointment.html',
         '#view-appointment': 'pages/patient-appointment.html',
         '#view-prescription': 'pages/prescription.html',
@@ -19,6 +20,8 @@ $(document).ready(function() {
     // The router will now call the initializer for the booking page directly.
     const pageInitializers = {
         '#login': initLoginPage,
+        '#doctor': initDoctorPage,
+        '#doctor-schedule': initDoctorSchedulePage,
         '#book-appointment': initBookAppointmentPage,
         '#view-appointment': initAppointmentPage,
         '#view-prescription': initPrescriptionPage,
@@ -95,6 +98,9 @@ $(document).ready(function() {
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ userId: userId, password: password }),
+                xhrFields:{
+                    withCredentials: true // this is required to include cookies
+                },
                 success: function(response) {
                     sessionStorage.setItem('userId', response.userId);
                     sessionStorage.setItem('userType', response.userType);

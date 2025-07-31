@@ -5,6 +5,7 @@ import edu.sjsu.dbms.clinicconnect5.model.Doctor;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+//import edu.sjsu.dbms.clinicconnect5.model.
 
 // Inside a method in your DatabaseConnector class
 

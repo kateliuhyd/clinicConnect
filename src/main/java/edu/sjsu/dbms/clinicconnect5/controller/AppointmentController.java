@@ -120,4 +120,11 @@ public class AppointmentController {
         List<AppointmentDetails> appts = appointmentDao.viewAppointments(patientId);
         return ResponseEntity.ok(appts);
     }
+
+    @GetMapping("/doctor-schedule")
+    public ResponseEntity<List<AppointmentDetails>> getDoctorSchedule(@RequestParam String doctorId) {
+        List<AppointmentDetails> appointments = appointmentDao.viewDoctorAppointments(doctorId);
+        return ResponseEntity.ok(appointments);
+    }
+
 }
