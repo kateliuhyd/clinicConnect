@@ -1,5 +1,4 @@
 package edu.sjsu.dbms.clinicconnect5.model;
-
 import java.util.Date;
 
 public class Prescription {

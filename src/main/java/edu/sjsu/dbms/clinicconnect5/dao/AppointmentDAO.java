@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +20,6 @@ import java.util.UUID;
 public class AppointmentDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
     @Autowired
     private JDBCConfiguration jdbcConfiguration;
 
@@ -140,5 +139,41 @@ public class AppointmentDAO {
             a.setPatientId(rs.getString("patientId"));
             return a;
         });
+    }
+
+    /**
+     * Doctor-side: view pending appointment requests for a doctor.
+     */
+    public List<AppointmentDetails> viewAppointmentRequests(String doctorId) {
+        String sql = """
+            SELECT
+              A.appt_id                AS apptId,
+              A.date                   AS dateTime,
+              P.first_name             AS patientFirstName,
+              P.last_name              AS patientLastName,
+              P.patient_id             AS patientId
+            FROM Appointment A
+            JOIN Patient P ON A.patient_id = P.patient_id
+            WHERE A.doc_id = ? AND A.status = 'PENDING'
+            ORDER BY A.date
+            """;
+
+        return jdbcTemplate.query(sql, new Object[]{doctorId}, (rs, rowNum) -> {
+            AppointmentDetails a = new AppointmentDetails();
+            a.setApptId(rs.getString("apptId"));
+            a.setDateTime(rs.getTimestamp("dateTime").toLocalDateTime());
+            a.setPatientFirstName(rs.getString("patientFirstName"));
+            a.setPatientLastName(rs.getString("patientLastName"));
+            a.setPatientId(rs.getString("patientId"));
+            return a;
+        });
+    }
+
+    /**
+     * Updates an appointment's status (e.g. CONFIRMED or REJECTED).
+     */
+    public int updateAppointmentStatus(String apptId, String newStatus) {
+        String sql = "UPDATE Appointment SET status = ? WHERE appt_id = ?";
+        return jdbcTemplate.update(sql, newStatus, apptId);
     }
 }

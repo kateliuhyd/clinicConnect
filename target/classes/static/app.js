@@ -14,7 +14,9 @@ $(document).ready(function() {
         '#book-appointment': 'pages/book-appointment.html',
         '#view-appointment': 'pages/patient-appointment.html',
         '#view-prescription': 'pages/prescription.html',
-        '#view-visit-summary': 'pages/visit.html'
+        '#view-visit-summary': 'pages/visit.html',
+        '#doctor-requests' : 'pages/doctor-requests.html',
+        '#doctor-history' : 'pages/doctor-history.html',
     };
 
     // The router will now call the initializer for the booking page directly.
@@ -25,7 +27,9 @@ $(document).ready(function() {
         '#book-appointment': initBookAppointmentPage,
         '#view-appointment': initAppointmentPage,
         '#view-prescription': initPrescriptionPage,
-        '#view-visit-summary': initVisitPage
+        '#view-visit-summary': initVisitPage,
+        '#doctor-requests' : initDoctorRequestsPage,
+        '#doctor-history' : initDoctorHistoryPage,
     };
 
     function router() {

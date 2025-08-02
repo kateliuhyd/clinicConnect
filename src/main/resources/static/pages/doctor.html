@@ -23,6 +23,8 @@
             </div>
         </div>
 
+        <!-- pages/doctor.html -->
+
         <!-- Appointment Requests Card -->
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm">
@@ -30,7 +32,9 @@
                     <i class="fas fa-clipboard-list fa-3x text-warning mb-3"></i>
                     <h5 class="card-title">Appointment Requests</h5>
                     <p class="card-text">Accept or reject new appointment bookings from patients.</p>
-                    <a href="#" class="btn btn-warning">View Requests</a>
+                                        <button type="button" class="btn btn-warning" id="viewRequestsBtn"
+                                                + onclick="window.location.hash = '#doctor-requests'">View Requests
+                                        </button>
                 </div>
             </div>
         </div>

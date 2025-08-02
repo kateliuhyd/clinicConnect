@@ -5,11 +5,9 @@ import edu.sjsu.dbms.clinicconnect5.dao.PrescriptionDAO;
 import edu.sjsu.dbms.clinicconnect5.model.AppointmentDetails;
 import edu.sjsu.dbms.clinicconnect5.model.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +25,13 @@ public class PrescriptionController {
     public ResponseEntity<List<Prescription>> getPrescriptions(@RequestParam("patientId") String patientId) {
         List<Prescription> medicines = prescriptionDao.getPrescriptions(patientId);
         return ResponseEntity.ok(medicines);
+    }
+
+
+    @PostMapping("/prescriptions")
+    public ResponseEntity<Void> addPrescription(@RequestBody Prescription p) {
+        int rows = prescriptionDao.addPrescription(p);
+        if (rows == 1) return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

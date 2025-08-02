@@ -5,12 +5,7 @@ import edu.sjsu.dbms.clinicconnect5.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.slf4j.Logger;
-import edu.sjsu.dbms.clinicconnect5.dao.UserDAO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -24,6 +19,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
 public class AppointmentController {
 
 
@@ -126,5 +122,23 @@ public class AppointmentController {
         List<AppointmentDetails> appointments = appointmentDao.viewDoctorAppointments(doctorId);
         return ResponseEntity.ok(appointments);
     }
+
+    // GET pending requests
+    @GetMapping("/appointment-requests")
+    public ResponseEntity<List<AppointmentDetails>> getAppointmentRequests(@RequestParam String doctorId) {
+        List<AppointmentDetails> viewAppointmentRequests = appointmentDao.viewAppointmentRequests(doctorId);
+        return ResponseEntity.ok(viewAppointmentRequests);
+    }
+
+    // POST to accept/reject
+    @PostMapping("/appointment-requests/{id}/status")
+    public ResponseEntity<Void> changeRequestStatus(
+            @PathVariable String id,
+            @RequestParam String status) {
+        int updated = appointmentDao.updateAppointmentStatus(id, status.toUpperCase());
+        if (updated == 1) return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
 
 }

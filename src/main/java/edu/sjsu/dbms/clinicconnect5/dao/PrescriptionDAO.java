@@ -6,11 +6,9 @@ import edu.sjsu.dbms.clinicconnect5.model.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import java.sql.Date;            // or java.util.Date
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 @Repository
@@ -80,4 +78,22 @@ public class PrescriptionDAO {
         }
         return prescriptions;
     }
+
+    public int addPrescription(Prescription p) {
+        String sql = "INSERT INTO Prescription "
+                + "(medicine_name, prescription_date, pid, did) "
+                + "VALUES (?, ?, ?, ?)";
+
+        // Wrap the java.util.Date in java.sql.Date for JDBC
+        java.sql.Date sqlDate = new java.sql.Date(p.getDate().getTime());
+
+        return jdbcTemplate.update(
+                sql,
+                p.getMedicineName(),
+                sqlDate,               // supply java.sql.Date here
+                p.getPatientId(),
+                p.getDoctorId()
+        );
+    }
+
 }

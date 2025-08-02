@@ -5,3 +5,9 @@ INSERT INTO ClinicDB.Appointment (appt_id,`date`,patient_id,doc_id,duration,appt
 	 ('3f46e14a-ff79-4762-8','2025-07-29 13:00:00','pat002','doc102',NULL,NULL),
 	 ('4fab6e6b-515f-482d-8','2025-08-02 14:00:00','pat001','doc101',NULL,NULL),
 	 ('d0bc7019-87a2-465e-8','2025-07-28 10:00:00','pat002','doc102',NULL,NULL);
+
+ALTER TABLE ClinicDB.Appointment
+    ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'PENDING';
+
+UPDATE ClinicDB.Appointment
+SET status = 'PENDING';
