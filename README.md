@@ -16,10 +16,11 @@ A web-based appointment management system for doctors and patients, built with S
 - [Front-End Routing](#front-end-routing)  
 - [Project Structure](#project-structure)  
 - [Team](#team)  
+- [License](#license)
 
 ---
 
-## Overview 
+## Overview
 
 ClinicConnect allows:
 
@@ -70,5 +71,5 @@ ClinicConnect allows:
 ### Clone & Setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/clinic-connect.git
+git clone https://github.com/kateliuhyd/clinic-connect.git
 cd clinic-connect
