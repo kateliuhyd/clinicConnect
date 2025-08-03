@@ -31,7 +31,10 @@ public class PrescriptionController {
     @PostMapping("/prescriptions")
     public ResponseEntity<Void> addPrescription(@RequestBody Prescription p) {
         int rows = prescriptionDao.addPrescription(p);
-        if (rows == 1) return ResponseEntity.status(HttpStatus.CREATED).build();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if (rows == 1) {
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

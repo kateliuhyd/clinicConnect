@@ -33,7 +33,7 @@
                     <h5 class="card-title">Appointment Requests</h5>
                     <p class="card-text">Accept or reject new appointment bookings from patients.</p>
                                         <button type="button" class="btn btn-warning" id="viewRequestsBtn"
-                                                + onclick="window.location.hash = '#doctor-requests'">View Requests
+                                                onclick="window.location.hash = '#doctor-requests'">View Requests
                                         </button>
                 </div>
             </div>
@@ -46,7 +46,9 @@
                     <i class="fas fa-history fa-3x text-info mb-3"></i>
                     <h5 class="card-title">Patient History</h5>
                     <p class="card-text">Access medical records and upload new prescriptions.</p>
-                    <a href="#" class="btn btn-info">Search Patients</a>
+                                        <button type="button" class="btn btn-info" id="viewHistoryBtn"
+                                                onclick="window.location.hash = '#doctor-history'"> View History
+                                        </button>
                 </div>
             </div>
         </div>
@@ -55,7 +57,6 @@
 </div>
 
 <script>
-    // 只是改变 hash，触发 router 加载 doctor-schedule.html
     document
         .getElementById('viewScheduleBtn')
         .addEventListener('click', ()=> window.location.hash = '#doctor-schedule');

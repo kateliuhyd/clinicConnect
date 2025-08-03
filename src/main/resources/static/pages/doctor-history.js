@@ -1,6 +1,5 @@
 // pages/doctor-history.js
 
-// Initialize the Doctor History page
 function initDoctorHistoryPage() {
     const doctorId = sessionStorage.getItem('userId');
     if (!doctorId) {
@@ -38,19 +37,19 @@ function initDoctorHistoryPage() {
                 data.forEach(v => {
                     const when = new Date(v.apptDate).toLocaleString();
                     list.append(`
-            <div class="card mb-2">
-              <div class="card-body">
-                <h5 class="card-title">${when}</h5>
-                <p class="card-text">${v.apptSummary || 'No summary available.'}</p>
-              </div>
-            </div>`);
+                        <div class="card mb-2">
+                          <div class="card-body">
+                            <h5 class="card-title">${when}</h5>
+                            <p class="card-text">${v.apptSummary || 'No summary available.'}</p>
+                          </div>
+                        </div>`);
                 });
             },
             error(xhr, status) {
                 $('#visit-list').html(`
-          <p id="history-error" class="text-danger">
-            Error loading history: ${status}
-          </p>`);
+                  <p id="history-error" class="text-danger">
+                    Error loading history: ${status}
+                  </p>`);
                 console.error('Error fetching visit history:', status, xhr);
             }
         });
@@ -60,25 +59,24 @@ function initDoctorHistoryPage() {
     $('#prescription-form').off('submit').on('submit', function(e) {
         e.preventDefault();
 
-        const patientId = $('#patient-id').val().trim();
-        if (!patientId) {
-            alert('Please enter a Patient ID');
-            return;
-        }
-
+        const patientId       = $('#patient-id').val().trim();
         const medicineName    = $('#medicine-name').val().trim();
-        const prescriptionDate = $('#prescription-date').val(); // yyyy-MM-dd
+        const prescriptionDate= $('#prescription-date').val(); // "YYYY-MM-DD"
 
-        if (!medicineName || !prescriptionDate) {
-            alert('Please fill out all prescription fields');
+        if (!patientId || !medicineName || !prescriptionDate) {
+            alert('Please fill out all fields');
             return;
         }
+
+        // Convert the YYYY-MM-DD string into an ISO string
+        const dateObj = new Date(prescriptionDate);
+        const isoDate = dateObj.toISOString();
 
         const payload = {
+            patientId:    patientId,
+            doctorId:     doctorId,
             medicineName: medicineName,
-            prescriptionDate: prescriptionDate,
-            patientId: patientId,
-            doctorId: doctorId
+            date:         isoDate    // <-- send ISO string so Jackson populates java.util.Date
         };
 
         $.ajax({
@@ -88,7 +86,6 @@ function initDoctorHistoryPage() {
             data: JSON.stringify(payload),
             success() {
                 alert('Prescription submitted successfully');
-                // Optionally clear form
                 $('#medicine-name').val('');
                 $('#prescription-date').val('');
             },
@@ -100,14 +97,14 @@ function initDoctorHistoryPage() {
     });
 }
 
-// Wire up router to initialize when hash changes
+// Router hookup
 $(window).on('hashchange', () => {
     if (window.location.hash === '#doctor-history') {
         initDoctorHistoryPage();
     }
 });
 
-// If user loads this page directly with #doctor-history
+// If page loaded directly at #doctor-history
 if (window.location.hash === '#doctor-history') {
     initDoctorHistoryPage();
 }
