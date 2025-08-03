@@ -1,47 +1,82 @@
 package edu.sjsu.dbms.clinicconnect5.model;
 
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class AppointmentDetails {
     private String apptId;
-    private LocalDateTime date;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime dateTime;         // Align with DAO's dateTime
+
+    // For doctor-view schedule
+    private String patientFirstName;
+    private String patientLastName;
+    private String patientId;
+
+    // For patient-view appointments
     private String doctorFirstName;
     private String doctorLastName;
-    private String departmentName;
     private String specialization;
-    private String status;
 
-    public AppointmentDetails() {
-    }
+    public AppointmentDetails() {}
 
-    public AppointmentDetails(String apptId, LocalDateTime date, String doctorFirstName,  String doctorLastName, String specialization) {
+    /** Patient-side constructor */
+    public AppointmentDetails(String apptId,
+                              LocalDateTime dateTime,
+                              String doctorFirstName,
+                              String doctorLastName,
+                              String specialization) {
         this.apptId = apptId;
-        this.date = date;
+        this.dateTime = dateTime;
         this.doctorFirstName = doctorFirstName;
         this.doctorLastName = doctorLastName;
         this.specialization = specialization;
     }
 
+    // ─── All getters & setters ───────────────────────────────────────
+
     public String getApptId() {
         return apptId;
     }
-
     public void setApptId(String apptId) {
         this.apptId = apptId;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    // ── Patient-schedule fields ──────────────────────────────────────
+
+    public String getPatientFirstName() {
+        return patientFirstName;
     }
+    public void setPatientFirstName(String patientFirstName) {
+        this.patientFirstName = patientFirstName;
+    }
+
+    public String getPatientLastName() {
+        return patientLastName;
+    }
+    public void setPatientLastName(String patientLastName) {
+        this.patientLastName = patientLastName;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+    // ── Patient-view fields ──────────────────────────────────────────
 
     public String getDoctorFirstName() {
         return doctorFirstName;
     }
-
     public void setDoctorFirstName(String doctorFirstName) {
         this.doctorFirstName = doctorFirstName;
     }
@@ -49,23 +84,13 @@ public class AppointmentDetails {
     public String getDoctorLastName() {
         return doctorLastName;
     }
-
     public void setDoctorLastName(String doctorLastName) {
         this.doctorLastName = doctorLastName;
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
     }
 
     public String getSpecialization() {
         return specialization;
     }
-
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
     }
