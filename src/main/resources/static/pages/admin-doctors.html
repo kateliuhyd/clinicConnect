@@ -1,0 +1,30 @@
+<div class="container py-4">
+    <h1>Doctor Management</h1>
+    <form id="doctor-form" class="row g-3 mb-4">
+        <div class="col-md-2">
+            <input type="text" id="doc-id" class="form-control" placeholder="Doctor ID" required>
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="doc-first" class="form-control" placeholder="First Name" required>
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="doc-last" class="form-control" placeholder="Last Name" required>
+        </div>
+        <div class="col-md-2">
+            <select id="dept-select" class="form-select" required></select>
+        </div>
+        <div class="col-md-2">
+            <select id="spec-select" class="form-select" required></select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-success">Add Doctor</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr><th>ID</th><th>Name</th><th>Dept</th><th>Spec</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="doctors-body"></tbody>
+    </table>
+</div>
