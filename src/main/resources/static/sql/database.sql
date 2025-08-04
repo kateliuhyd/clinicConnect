@@ -62,19 +62,7 @@ CREATE TABLE Patient (
 
 
 
-CREATE TABLE Admin (
-    admin_id VARCHAR(20) PRIMARY KEY,
-    dept_id INT,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    dob DATE,
-    FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
-    ON DELETE SET NULL
-    ON UPDATE SET NULL,
-    FOREIGN KEY (admin_id) REFERENCES User(user_id)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE
-);
+
 
 CREATE TABLE Prescription (
     pid VARCHAR(20),
@@ -82,7 +70,19 @@ CREATE TABLE Prescription (
     prescription_date DATE,
     did VARCHAR(20),
     PRIMARY KEY (pid, medicine_name, prescription_date),
-    FOREIGN KEY (pid) REFERENCES Patient(patient_id)
+    FOREIGN KEY (pid) REFCREATE TABLE Admin (
+        admin_id VARCHAR(20) PRIMARY KEY,
+        dept_id INT,
+        first_name VARCHAR(50) NOT NULL,
+        last_name VARCHAR(50) NOT NULL,
+        dob DATE,
+        FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
+        ON DELETE SET NULL
+        ON UPDATE SET NULL,
+        FOREIGN KEY (admin_id) REFERENCES User(user_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+        );ERENCES Patient(patient_id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
     FOREIGN KEY (did) REFERENCES Doctor(doc_id)
@@ -107,18 +107,21 @@ CREATE TABLE Review (
 );
 
 CREATE TABLE Appointment (
-    appt_id VARCHAR(20) PRIMARY KEY,
-    date TIMESTAMP,
-    patient_id VARCHAR(20),
-    doc_id VARCHAR(20),
-    duration TIMESTAMP,
-    appt_summary VARCHAR(1000),
-    FOREIGN KEY (patient_id) REFERENCES Patient(patient_id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-    FOREIGN KEY (doc_id) REFERENCES Doctor(doc_id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+                             appt_id CHAR(36) NOT NULL PRIMARY KEY,
+                             `date` DATETIME NOT NULL,
+                             patient_id VARCHAR(20) NOT NULL,
+                             doc_id VARCHAR(20) NOT NULL,
+                             duration INT NULL,
+                             appt_summary TEXT NULL,
+                             status ENUM('PENDING','CONFIRMED','CANCELLED') NOT NULL DEFAULT 'PENDING',
+                             FOREIGN KEY (patient_id)
+                                 REFERENCES Patient(patient_id)
+                                 ON UPDATE CASCADE
+                                 ON DELETE CASCADE,
+                             FOREIGN KEY (doc_id)
+                                 REFERENCES Doctor(doc_id)
+                                 ON UPDATE CASCADE
+                                 ON DELETE CASCADE
 );
 
 CREATE INDEX idx_Doctor_dept_id on Doctor(dept_id);

@@ -2,12 +2,9 @@ package edu.sjsu.dbms.clinicconnect5.dao;
 
 import edu.sjsu.dbms.clinicconnect5.configuration.JDBCConfiguration;
 import edu.sjsu.dbms.clinicconnect5.model.Doctor;
-import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-//import edu.sjsu.dbms.clinicconnect5.model.
-
-// Inside a method in your DatabaseConnector class
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,121 +17,97 @@ public class DoctorDAO {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private JDBCConfiguration jdbcConfiguration;
-    private ResultSet res = null;
-    private PreparedStatement s = null;
-    private Connection c = null;
 
+    private Connection c = null;
+    private PreparedStatement s = null;
+    private ResultSet res = null;
+
+    /**
+     * Search for doctors in a department, joining the Specialization table.
+     */
     public List<Doctor> searchDoctor(Integer deptId) {
         List<Doctor> doctors = new ArrayList<>();
-
         try {
             c = jdbcConfiguration.getConnection();
-            String sql = "SELECT doc_id, first_name, last_name, S.specialization_name FROM Doctor D, Speciliazation S  WHERE Doctor.specialization_id = Specialization.specialization_id and dept_id = ?";
+            String sql = """
+                SELECT
+                  D.doc_id,
+                  D.first_name,
+                  D.last_name,
+                  S.specialization_name AS specialization
+                FROM Doctor D
+                JOIN Specialization S
+                  ON D.specialization_id = S.specialization_id
+                WHERE D.dept_id = ?
+            """;
             s = c.prepareStatement(sql);
             s.setInt(1, deptId);
             res = s.executeQuery();
-            if (res != null) {
-                while (res.next()) {
-                    doctors.add(new Doctor(
-                            res.getString("doc_id"),
-                            res.getString("first_name"),
-                            res.getString("last_name"),
-                            res.getString("specialization_name")
-                    ));
-                }
+            while (res.next()) {
+                doctors.add(new Doctor(
+                        res.getString("doc_id"),
+                        res.getString("first_name"),
+                        res.getString("last_name"),
+                        res.getString("specialization")
+                ));
             }
-            res.close();
-            s.close();
-            c.close();
-        } catch (SQLException E) {
-                if (res != null) {
-                    try {
-                        res.close();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            if (s != null) {
-                try {
-                    s.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            System.out.println("SQLException:" + E.getMessage());
-            System.out.println("SQLState:" + E.getSQLState());
-            System.out.println("VendorError:" + E.getErrorCode());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        } finally {
+            // Close resources in reverse order of opening
+            try { if (res != null) res.close(); } catch (SQLException ignored) {}
+            try { if (s   != null) s.close();   } catch (SQLException ignored) {}
+            try { if (c   != null) c.close();   } catch (SQLException ignored) {}
         }
         return doctors;
     }
 
+    /**
+     * Insert a new doctor record.
+     */
     public void addDoctor(Doctor doctor) {
         try {
-             c = jdbcConfiguration.getConnection();
-            String sql = "INSERT INTO doctors (doc_id, first_name, last_name, specialization_id VALUES (?, ?, ? ,? )";
+            c = jdbcConfiguration.getConnection();
+            String sql = """
+                INSERT INTO Doctor
+                  (doc_id, first_name, last_name, specialization_id)
+                VALUES (?, ?, ?, ?)
+            """;
             s = c.prepareStatement(sql);
             s.setString(1, doctor.getDoc_id());
             s.setString(2, doctor.getFirst_name());
             s.setString(3, doctor.getLast_name());
-            s.setString(5, doctor.getSpecialization_id());
+            s.setString(4, doctor.getSpecialization_id());
             s.executeUpdate();
-        }
-        catch (SQLException E) {
-            if (s != null) {
-                try {
-                    s.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            System.out.println("SQLException:" + E.getMessage());
-            System.out.println("SQLState:" + E.getSQLState());
-            System.out.println("VendorError:" + E.getErrorCode());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        } finally {
+            try { if (s != null) s.close(); } catch (SQLException ignored) {}
+            try { if (c != null) c.close(); } catch (SQLException ignored) {}
         }
     }
 
-    public void deleteDoctor(String id) {
+    /**
+     * Delete a doctor by ID.
+     */
+    public void deleteDoctor(String docId) {
         try {
             c = jdbcConfiguration.getConnection();
-            String sql = "DELETE FROM doctors WHERE id=?";
+            String sql = "DELETE FROM Doctor WHERE doc_id = ?";
             s = c.prepareStatement(sql);
-            s.setString(1,
-                    id);
+            s.setString(1, docId);
             s.executeUpdate();
-        }
-        catch (SQLException E) {
-            if (s != null) {
-                try {
-                    s.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            System.out.println("SQLException:" + E.getMessage());
-            System.out.println("SQLState:" + E.getSQLState());
-            System.out.println("VendorError:" + E.getErrorCode());
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        } finally {
+            try { if (s != null) s.close(); } catch (SQLException ignored) {}
+            try { if (c != null) c.close(); } catch (SQLException ignored) {}
         }
     }
 }

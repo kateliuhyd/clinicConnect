@@ -18,6 +18,11 @@ public class AppointmentDetails {
     private String doctorLastName;
     private String specialization;
 
+
+
+    private String apptSummary;
+    private String status;
+
     public AppointmentDetails() {}
 
     /** Patient-side constructor */
@@ -94,4 +99,21 @@ public class AppointmentDetails {
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
     }
+
+    public String getApptSummary() {
+        return apptSummary;
+    }
+
+    public void setApptSummary(String apptSummary) {
+        this.apptSummary = apptSummary;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }

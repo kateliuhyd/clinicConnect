@@ -17,6 +17,7 @@ public class DoctorProfile extends UserProfileResponse {
         this.specialization = specialization;
     }
 
+
     public Integer getDeptId() {
         return deptId;
     }
