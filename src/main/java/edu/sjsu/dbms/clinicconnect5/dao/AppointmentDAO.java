@@ -40,16 +40,15 @@ public class AppointmentDAO {
      * Finds all doctors in a given department.
      */
     public List<DoctorProfile> findDoctorsByDepartment(Integer deptId) {
-        String sql = "SELECT doc_id, first_name, last_name, specialization "
-                + "FROM Doctor WHERE dept_id = ?";
+        String sql = "SELECT doc_id, first_name, last_name, specialization_name "
+                + "FROM Doctor, Specialization WHERE Doctor.specialization_id = Specialization.specialization_id and dept_id = ?";
         RowMapper<DoctorProfile> rowMapper = (rs, rowNum) ->
                 new DoctorProfile(
                         rs.getString("doc_id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
-                        null, null, null, null, null,
                         deptId,
-                        rs.getString("specialization")
+                        rs.getString("specialization_name")
                 );
         return jdbcTemplate.query(sql, rowMapper, deptId);
     }
@@ -94,10 +93,9 @@ public class AppointmentDAO {
               A.date                   AS dateTime,
               D.first_name             AS doctorFirstName,
               D.last_name              AS doctorLastName,
-              D.specialization         AS specialization
-            FROM Appointment A
-            JOIN Doctor D ON A.doc_id = D.doc_id
-            WHERE A.patient_id = ?
+              S.specialization_name         AS specialization
+            FROM Appointment A, Doctor D, Specialization S
+            WHERE D.doc_id = A.doc_id and D.specialization_id = S.specialization_id and A.patient_id = ?
             ORDER BY A.date
             """;
 

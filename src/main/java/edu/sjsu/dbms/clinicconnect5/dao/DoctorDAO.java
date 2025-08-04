@@ -29,7 +29,7 @@ public class DoctorDAO {
 
         try {
             c = jdbcConfiguration.getConnection();
-            String sql = "SELECT doc_id, first_name, last_name, city, specialization FROM Doctor WHERE dept_id = ?";
+            String sql = "SELECT doc_id, first_name, last_name, S.specialization_name FROM Doctor D, Speciliazation S  WHERE Doctor.specialization_id = Specialization.specialization_id and dept_id = ?";
             s = c.prepareStatement(sql);
             s.setInt(1, deptId);
             res = s.executeQuery();
@@ -39,8 +39,7 @@ public class DoctorDAO {
                             res.getString("doc_id"),
                             res.getString("first_name"),
                             res.getString("last_name"),
-                            res.getString("city"),
-                            res.getString("specialization")
+                            res.getString("specialization_name")
                     ));
                 }
             }
@@ -80,13 +79,12 @@ public class DoctorDAO {
     public void addDoctor(Doctor doctor) {
         try {
              c = jdbcConfiguration.getConnection();
-            String sql = "INSERT INTO doctors (doc_id, first_name, last_name, city, specialization VALUES (?, ?, ? , ? ,? )";
+            String sql = "INSERT INTO doctors (doc_id, first_name, last_name, specialization_id VALUES (?, ?, ? ,? )";
             s = c.prepareStatement(sql);
             s.setString(1, doctor.getDoc_id());
             s.setString(2, doctor.getFirst_name());
             s.setString(3, doctor.getLast_name());
-            s.setString(4, doctor.getLocation());
-            s.setString(5, doctor.getSpecialization());
+            s.setString(5, doctor.getSpecialization_id());
             s.executeUpdate();
         }
         catch (SQLException E) {

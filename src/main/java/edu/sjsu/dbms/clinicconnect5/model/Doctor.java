@@ -5,8 +5,7 @@ public class Doctor {
     private String doc_id;
     private String first_name;
     private String last_name;
-    private String location;
-    private String specialization;
+    private String specialization_name;
 
 
     public String getDoc_id() {
@@ -34,28 +33,21 @@ public class Doctor {
     }
 
 
-    public String getSpecialization() {
-        return specialization;
+    public String getSpecialization_id() {
+        return specialization_name;
     }
 
-    public void setSpecialization(String specialization) {
-        this.specialization = specialization;
+    public void setSpecialization_id(String specialization_id) {
+        this.specialization_name = specialization_name;
     }
 
-    public String getLocation() {
-        return location;
-    }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
-    public Doctor(String id, String first_name, String last_name, String location, String specialization) {
+    public Doctor(String id, String first_name, String last_name, String specialization_name) {
         this.doc_id = id;
         this.first_name = first_name;
         this.last_name = last_name;
-        this.location = location;
-        this.specialization = specialization;
+        this.specialization_name = specialization_name;
     }
 
 }

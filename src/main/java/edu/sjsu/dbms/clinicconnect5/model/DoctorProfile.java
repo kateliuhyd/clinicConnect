@@ -9,8 +9,8 @@ public class DoctorProfile extends UserProfileResponse {
         super();
     }
 
-    public DoctorProfile(String id, String firstName, String lastName, String addressLine, String city, String state, String zipCode, String country, Integer deptId, String specialization) {
-        super(id, firstName, lastName, addressLine, city, state, zipCode, country);
+    public DoctorProfile(String id, String firstName, String lastName, Integer deptId, String specialization) {
+        super(id, firstName, lastName);
 
         // Initialize fields specific to this class
         this.deptId = deptId;

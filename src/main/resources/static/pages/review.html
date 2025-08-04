@@ -1,0 +1,63 @@
+<div class="container py-4">
+    <div class="mb-4">
+        <h1 class="h2">Write a Review</h1>
+        <p class="text-muted">Follow the steps below to find a doctor and write or read reviews.</p>
+    </div>
+
+    <!-- Department Selection -->
+    <div id="step-1-department" class="mb-4">
+        <h4><span class="badge bg-primary rounded-pill me-2">1</span> Choose a Department</h4>
+        <select id="department-select" class="form-select form-select-lg">
+            <option selected disabled>Loading departments...</option>
+        </select>
+    </div>
+
+    <!-- Doctor Selection -->
+    <div id="step-2-doctor" class="mb-4" style="display: none;">
+        <h4><span class="badge bg-primary rounded-pill me-2">2</span> Select a Doctor</h4>
+        <div id="doctor-list" class="list-group">
+            <!-- Doctors will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Read or Write Selection -->
+    <div id="step-4-read" class="mt-4" style="display: none;">
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-clipboard-list fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Read Reviews</h5>
+                    <p class="card-text">Read Reviews of Doctors.</p>
+                    <button> type="button" class="btn btn-warning" id="readReviewBtn"
+                        onclick="window.location.hash = '#review'">Read Review
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step-4-write" class="mt-4" style="display: none;">
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-clipboard-list fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Write Reviews</h5>
+                    <p class="card-text">Write Reviews for Doctors.</p>
+                    <button> type="button" class="btn btn-warning" id="writeReviewBtn"
+                        onclick="window.location.hash = '#review'">Write Review
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation -->
+    <div id="step-4-confirm" class="mt-4" style="display: none;">
+        <div class="alert alert-info">
+            You have selected an appointment with <strong id="confirm-doctor"></strong> on <strong id="confirm-date"></strong> at <strong id="confirm-time"></strong>.
+        </div>
+        <button id="book-now-btn" class="btn btn-success btn-lg">
+            <i class="fas fa-check-circle me-2"></i>Submit Review
+        </button>
+    </div>
+</div>

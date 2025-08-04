@@ -86,7 +86,7 @@ public class PrescriptionDAO {
                 + "VALUES (?, ?, ?, ?)";
 
         // Wrap the java.util.Date in java.sql.Date for JDBC
-        java.sql.Date sqlDate = new java.sql.Date(p.getDate().getTime());
+        Date sqlDate = new Date(p.getDate().getTime());
 
         return jdbcTemplate.update(
                 sql,
