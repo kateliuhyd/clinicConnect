@@ -1,5 +1,5 @@
 **Title:**
-✨ Full-Stack ClinicConnect Web App: Database Design, REST API, and SPA Front-End
+ Full-Stack ClinicConnect Web App: Database Design, REST API, and SPA Front-End
 
 ---
 
@@ -129,7 +129,7 @@ This Pull Request delivers a complete end-to-end ClinicConnect system, including
    * Open `http://localhost:8080/`
    * Log in as doctor (`doc101` / `pass001`), view schedule, requests, history + medical record
    * Log in as patient (`pat001` / `pw001`), book appointment, view visits & prescriptions
-   * As admin, manage patients & doctors
+   * Log in as admin (`admin001` / `adm001`), manage patients & doctors
 
 ---
 
