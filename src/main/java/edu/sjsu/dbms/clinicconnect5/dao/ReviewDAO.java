@@ -1,18 +1,20 @@
 package edu.sjsu.dbms.clinicconnect5.dao;
 
 import edu.sjsu.dbms.clinicconnect5.configuration.JDBCConfiguration;
-import edu.sjsu.dbms.clinicconnect5.model.AppointmentDetails;
-import edu.sjsu.dbms.clinicconnect5.model.Prescription;
+import edu.sjsu.dbms.clinicconnect5.model.Review;
+import edu.sjsu.dbms.clinicconnect5.model.ReviewDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import java.sql.Date;            // or java.util.Date
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 @Repository
-public class PrescriptionDAO {
+public class ReviewDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -21,28 +23,28 @@ public class PrescriptionDAO {
     private PreparedStatement s = null;
     private Connection c = null;
 
-    public PrescriptionDAO(JdbcTemplate jdbcTemplate) {
+    public ReviewDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Prescription> getPrescriptions(String patientId) {
-        List<Prescription> prescriptions = new ArrayList<>();
+    public List<ReviewDetails> getReviewDetails(String docId) {
+        List<ReviewDetails> reviewDetails = new ArrayList<>();
         try {
             c = jdbcConfiguration.getConnection();
-            String sql = "SELECT P.medicine_name, P.prescription_date, D.first_name, D.last_name, P.pid, P.did " +
-                    "FROM Prescription P, Doctor D WHERE P.did = D.doc_id AND P.pid = ?";
+            String sql = "SELECT R.rid, P.first_name, P.last_name, R.content, R.rating, R.review_date " +
+                    "FROM Review R, Patient P WHERE R.pid = P.patient_id AND R.did = ?";
             s = c.prepareStatement(sql);
-            s.setString(1, patientId);
+            s.setString(1, docId);
             res = s.executeQuery();
             if (res != null) {
                 while (res.next()) {
-                    prescriptions.add(new Prescription(
-                            res.getString("medicine_name"),
-                            res.getDate("prescription_date"),
+                    reviewDetails.add(new ReviewDetails(
+                            res.getString("rid"),
                             res.getString("first_name"),
-                            res.getString("last_name"),
-                            res.getString("pid"),
-                            res.getString("did")
+                            res.getString("last_Name"),
+                            res.getString("content"),
+                            res.getInt("rating"),
+                            res.getDate("review_date")
                     ));
                 }
             }
@@ -76,25 +78,26 @@ public class PrescriptionDAO {
             System.out.println("SQLState:" + E.getSQLState());
             System.out.println("VendorError:" + E.getErrorCode());
         }
-        return prescriptions;
+        return reviewDetails;
     }
 
-
-    public int addPrescription(Prescription p) {
-        String sql = "INSERT INTO Prescription "
-                + "(medicine_name, prescription_date, pid, did) "
-                + "VALUES (?, ?, ?, ?)";
+    public int addReview(Review r) {
+        String sql = "INSERT INTO Review "
+                + "(rid, pid, did, content, rating, review_date) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
 
         // Wrap the java.util.Date in java.sql.Date for JDBC
-        Date sqlDate = new Date(p.getDate().getTime());
+        String rid = UUID.randomUUID().toString().substring(0, 20);
+        Date date = Date.valueOf(LocalDate.now());
 
         return jdbcTemplate.update(
                 sql,
-                p.getMedicineName(),
-                sqlDate,               // supply java.util.Date here
-                p.getPatientId(),
-                p.getDoctorId()
+                rid,
+                r.getPatientId(),
+                r.getDoctorId(),
+                r.getComment(),
+                r.getRating(),
+                date
         );
     }
-
 }

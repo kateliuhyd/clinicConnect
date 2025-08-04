@@ -3,7 +3,6 @@ package edu.sjsu.dbms.clinicconnect5.dao;
 import edu.sjsu.dbms.clinicconnect5.model.Patient;
 //import edu.sjsu.dbms.clinicconnect5.model.Prescription;
 import edu.sjsu.dbms.clinicconnect5.model.Prescription;
-import edu.sjsu.dbms.clinicconnect5.model.Review;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;

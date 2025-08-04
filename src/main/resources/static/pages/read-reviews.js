@@ -1,5 +1,5 @@
 
-function initReviewPage() {
+function initReadReviewPage() {
     let selectedDoctorId = null;
     let selectedDoctorName = null;
     let selectedDate = null;
@@ -10,7 +10,7 @@ function initReviewPage() {
     const departmentSelect = $('#department-select');
     const doctorList = $('#doctor-list');
 
-    const WriteReview = $('#step-3-Write-Review');
+    const ReadeReview = $('#step-3-Read-Review');
 
     // Step 1: Fetch and populate departments
     $.ajax({
@@ -64,40 +64,38 @@ function initReviewPage() {
         selectedDoctorId = $(this).data('doctor-id');
         selectedDoctorName = $(this).data('doctor-name');
         $('#selected-doctor-name').text(selectedDoctorName);
-        $('#step-3-Write-Review').show();
-
-    });
-
-
-    WriteReview.on('click', '#submitButton', function() {
-        const patientId = sessionStorage.getItem('userId');
-        const comment = $('#review').val();
-        const rating = $('#rating').val();
-        if (!patientId || !selectedDoctorId) {
-            alert('An error occurred. Please start over.');
-            return;
-        }
-
-        const requestData = {
-            doctorId: selectedDoctorId,
-            patientId: patientId,
-            comment: comment,
-            rating: rating,
-        };
-
+        $('#step-3-Read-Review').show();
 
         $.ajax({
-            url: '/api/addReview',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(requestData),
-            success: function() {
-                alert('Review Successfully Submitted!');
-                window.location.hash = '#patient';
-            },
-            error: function(xhr) {
-                alert('An error occurred while booking. Please try again.');
-            }
+            url: `/api/getReviewDetails?doctorId=${selectedDoctorId}`,
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var tableBody = $('#review-table-body');
+                tableBody.empty(); // Clear existing rows if any
+
+                $.each(data, function (index, reviews) {
+                    var row = '<tr>' +
+                        '<td>' + reviews.reviewDate + '</td>' +
+                        '<td>' + reviews.comment + '</td>' +
+                        '<td>' + reviews.rating + '</td>' +
+                        '<td>' + reviews.patientFirstName + '</td>' +
+                        '<td>' + reviews.patientLastName + '</td>' +
+                        '</tr>';
+                        tableBody.append(row);
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error fetching data:", textStatus, errorThrown);
+                }
+            });
+
+        });
+
+    $(document).ready(function() {
+        $('#back-button').on('click', function() {
+            window.location.hash = '#patient';
         });
     });
+
 }
