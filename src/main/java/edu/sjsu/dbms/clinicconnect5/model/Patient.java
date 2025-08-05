@@ -1,70 +1,139 @@
 package edu.sjsu.dbms.clinicconnect5.model;
 
+import java.time.LocalDate;
+
 public class Patient {
-
-    private String patient_id;
-    private String first_name;
-    private String last_name;
-    private String location;
-    private String medical_insurance;
-    private String preferred_pharmacy;
-
-    /*
+    private String patientId;
+    private String firstName;
+    private String lastName;
+    private LocalDate dob;
+    private String addressLine;
+    private String city;
+    private String state;
+    private String zipCode;
+    private String country;
+    private String medicalInsurance;
+    private String preferredPharmacy;
 
     public Patient() {}
 
-    public Patient(String id, String first_name, String last_name, String location, String med_insurance, String preferred_pharmacy) {
-        this.patient_id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.location = location;
-        this.medical_insurance = med_insurance;
-        this.preferred_pharmacy = preferred_pharmacy;
+    public Patient(
+            String patientId,
+            String firstName,
+            String lastName,
+            LocalDate dob,
+            String addressLine,
+            String city,
+            String state,
+            String zipCode,
+            String country,
+            String medicalInsurance,
+            String preferredPharmacy
+    ) {
+        this.patientId         = patientId;
+        this.firstName         = firstName;
+        this.lastName          = lastName;
+        this.dob               = dob;
+        this.addressLine       = addressLine;
+        this.city              = city;
+        this.state             = state;
+        this.zipCode           = zipCode;
+        this.country           = country;
+        this.medicalInsurance  = medicalInsurance;
+        this.preferredPharmacy = preferredPharmacy;
     }
 
-    public int getPatient_id() {
-        return patient_id;
+    public String getPatientId() {
+        return patientId;
     }
-    public void setPatient_id(int id) {
-        this.patient_id = patient_id;
-    }
-    public String getFirst_name() {
-        return first_name;
-    }
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-    public String getLast_name() {
-        return last_name;
-    }
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
-    public String getLocation() {
-        return location;
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getMedical_insurance() {
-        return medical_insurance;
+    public LocalDate getDob() {
+        return dob;
+    }
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
-    public void setMedical_insurance(String medical_insurance) {
-        this.medical_insurance = medical_insurance;
+    public String getAddressLine() {
+        return addressLine;
+    }
+    public void setAddressLine(String addressLine) {
+        this.addressLine = addressLine;
     }
 
-    public String getPreferred_pharmacy() {
-        return preferred_pharmacy;
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public void setPreferred_pharmacy(String preferred_pharmacy) {
-        this.preferred_pharmacy = preferred_pharmacy;
+    public String getState() {
+        return state;
+    }
+    public void setState(String state) {
+        this.state = state;
     }
 
-     */
+    public String getZipCode() {
+        return zipCode;
+    }
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getMedicalInsurance() {
+        return medicalInsurance;
+    }
+    public void setMedicalInsurance(String medicalInsurance) {
+        this.medicalInsurance = medicalInsurance;
+    }
+
+    public String getPreferredPharmacy() {
+        return preferredPharmacy;
+    }
+    public void setPreferredPharmacy(String preferredPharmacy) {
+        this.preferredPharmacy = preferredPharmacy;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "patientId='" + patientId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dob=" + dob +
+                ", addressLine='" + addressLine + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", country='" + country + '\'' +
+                ", medicalInsurance='" + medicalInsurance + '\'' +
+                ", preferredPharmacy='" + preferredPharmacy + '\'' +
+                '}';
+    }
 }
-

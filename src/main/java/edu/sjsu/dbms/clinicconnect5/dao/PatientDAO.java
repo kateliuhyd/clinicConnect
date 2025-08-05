@@ -1,87 +1,54 @@
 package edu.sjsu.dbms.clinicconnect5.dao;
 
+import edu.sjsu.dbms.clinicconnect5.configuration.JDBCConfiguration;
 import edu.sjsu.dbms.clinicconnect5.model.Patient;
-//import edu.sjsu.dbms.clinicconnect5.model.Prescription;
-import edu.sjsu.dbms.clinicconnect5.model.Prescription;
-import edu.sjsu.dbms.clinicconnect5.model.Review;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
 public class PatientDAO {
-/*
+    @Autowired private JdbcTemplate jdbc;
+    @Autowired private JDBCConfiguration jdbcConfig;
+
     public List<Patient> findAll() {
-        List<Patient> patients = new ArrayList<>();
-        String sql = "SELECT * FROM patients";
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                patients.add(new Patient(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return patients;
+        String sql = "SELECT patient_id, first_name, last_name, dob, address_line, city, state, zip_code, country, medical_insurance, preferred_pharmacy "
+                + "FROM Patient ORDER BY last_name, first_name";
+        return jdbc.query(sql, (rs, i) -> mapPatient(rs));
     }
 
-    public void addPatient(Patient patient) {
-        String sql = "INSERT INTO patients (patient_id, first_name, last_name, age, diagnosis) VALUES (?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, patient.getName());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public int addPatient(Patient p) {
+        String sql = "INSERT INTO Patient(patient_id, first_name, last_name, dob, address_line, city, state, zip_code, country, medical_insurance, preferred_pharmacy) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        return jdbc.update(sql,
+                p.getPatientId(), p.getFirstName(), p.getLastName(), p.getDob(),
+                p.getAddressLine(), p.getCity(), p.getState(), p.getZipCode(),
+                p.getCountry(), p.getMedicalInsurance(), p.getPreferredPharmacy()
+        );
     }
 
-    public void deletePatient(int id) {
-        String sql = "DELETE FROM patients WHERE id=?";
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public int deletePatient(String patientId) {
+        return jdbc.update("DELETE FROM Patient WHERE patient_id = ?", patientId);
     }
 
-
-    // Example: ordering a prescription (simple insert)
-    public void orderPrescription(int patientId, Prescription prescription) {
-        String sql = "INSERT INTO prescriptions (patient_id, medication, dosage) VALUES (?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, patientId);
-            ps.setString(2, prescription.getMedication());
-            ps.setString(3, prescription.getDosage());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    private Patient mapPatient(ResultSet rs) throws SQLException {
+        Patient p = new Patient();
+        p.setPatientId(rs.getString("patient_id"));
+        p.setFirstName(rs.getString("first_name"));
+        p.setLastName(rs.getString("last_name"));
+        p.setDob(rs.getDate("dob").toLocalDate());
+        p.setAddressLine(rs.getString("address_line"));
+        p.setCity(rs.getString("city"));
+        p.setState(rs.getString("state"));
+        p.setZipCode(rs.getString("zip_code"));
+        p.setCountry(rs.getString("country"));
+        p.setMedicalInsurance(rs.getString("medical_insurance"));
+        p.setPreferredPharmacy(rs.getString("preferred_pharmacy"));
+        return p;
     }
-
-    // Reviews could be stored in DoctorDAO, but here is a stub for adding review
-    public void addReview(int doctorId, Review review) {
-        String sql = "INSERT INTO reviews (doctor_id, patient_id, comment, rating) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
-            ps.setInt(2, review.getPatientId());
-            ps.setString(3, review.getComment());
-            ps.setInt(4, review.getRating());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
- */
 }
+

@@ -40,17 +40,26 @@ public class AppointmentDAO {
      * Finds all doctors in a given department.
      */
     public List<DoctorProfile> findDoctorsByDepartment(Integer deptId) {
-        String sql = "SELECT doc_id, first_name, last_name, specialization "
-                + "FROM Doctor WHERE dept_id = ?";
-        RowMapper<DoctorProfile> rowMapper = (rs, rowNum) ->
-                new DoctorProfile(
-                        rs.getString("doc_id"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
-                        null, null, null, null, null,
-                        deptId,
-                        rs.getString("specialization")
-                );
+        String sql = """
+          SELECT
+            D.doc_id                      AS docId,
+            D.first_name                  AS firstName,
+            D.last_name                   AS lastName,
+            S.specialization_name         AS specialization
+          FROM Doctor D
+          JOIN Specialization S
+            ON D.specialization_id = S.specialization_id
+          WHERE D.dept_id = ?
+      """;
+
+        RowMapper<DoctorProfile> rowMapper = (rs, rowNum) -> new DoctorProfile(
+                /* id: */              rs.getString("docId"),
+                /* firstName: */       rs.getString("firstName"),
+                /* lastName: */        rs.getString("lastName"),
+                /* deptId: */          deptId,
+                /* specialization: */  rs.getString("specialization")
+        );
+
         return jdbcTemplate.query(sql, rowMapper, deptId);
     }
 
@@ -89,17 +98,21 @@ public class AppointmentDAO {
      */
     public List<AppointmentDetails> viewAppointments(String patientId) {
         String sql = """
-            SELECT
-              A.appt_id                AS apptId,
-              A.date                   AS dateTime,
-              D.first_name             AS doctorFirstName,
-              D.last_name              AS doctorLastName,
-              D.specialization         AS specialization
-            FROM Appointment A
-            JOIN Doctor D ON A.doc_id = D.doc_id
-            WHERE A.patient_id = ?
-            ORDER BY A.date
-            """;
+        SELECT
+          A.appt_id          AS apptId,
+          A.date             AS dateTime,
+          D.first_name       AS doctorFirstName,
+          D.last_name        AS doctorLastName,
+          S.specialization_name AS specialization,
+          A.appt_summary     AS apptSummary,
+          A.status           AS status
+        FROM Appointment A
+        JOIN Doctor D  ON A.doc_id = D.doc_id
+        JOIN Specialization S ON D.specialization_id = S.specialization_id
+        WHERE A.patient_id = ?
+        ORDER BY A.date
+        
+        """;
 
         return jdbcTemplate.query(sql, new Object[]{patientId}, (rs, rowNum) -> {
             AppointmentDetails a = new AppointmentDetails();
@@ -108,27 +121,32 @@ public class AppointmentDAO {
             a.setDoctorFirstName(rs.getString("doctorFirstName"));
             a.setDoctorLastName(rs.getString("doctorLastName"));
             a.setSpecialization(rs.getString("specialization"));
+            a.setApptSummary(rs.getString("apptSummary"));
+            a.setStatus(rs.getString("status"));
             return a;
         });
+
     }
 
     /**
      * Doctor-side: view schedule for a doctor.
-     * Joins Patient to get patient names and IDs.
      */
     public List<AppointmentDetails> viewDoctorAppointments(String doctorId) {
         String sql = """
-            SELECT
-              A.appt_id                AS apptId,
-              A.date                   AS dateTime,
-              P.first_name             AS patientFirstName,
-              P.last_name              AS patientLastName,
-              P.patient_id             AS patientId
-            FROM Appointment A
-            JOIN Patient P ON A.patient_id = P.patient_id
-            WHERE A.doc_id = ?
-            ORDER BY A.date
-            """;
+        SELECT
+          A.appt_id                AS apptId,
+          A.date                   AS dateTime,
+          P.first_name             AS patientFirstName,
+          P.last_name              AS patientLastName,
+          P.patient_id             AS patientId,
+          A.appt_summary           AS apptSummary,
+          A.status                 AS status
+        FROM Appointment A
+        JOIN Patient P
+          ON A.patient_id = P.patient_id
+        WHERE A.doc_id = ?
+        ORDER BY A.date
+        """;
 
         return jdbcTemplate.query(sql, new Object[]{doctorId}, (rs, rowNum) -> {
             AppointmentDetails a = new AppointmentDetails();
@@ -137,9 +155,12 @@ public class AppointmentDAO {
             a.setPatientFirstName(rs.getString("patientFirstName"));
             a.setPatientLastName(rs.getString("patientLastName"));
             a.setPatientId(rs.getString("patientId"));
+            a.setApptSummary(rs.getString("apptSummary"));
+            a.setStatus(rs.getString("status"));
             return a;
         });
     }
+
 
     /**
      * Doctor-side: view pending appointment requests for a doctor.
@@ -176,4 +197,13 @@ public class AppointmentDAO {
         String sql = "UPDATE Appointment SET status = ? WHERE appt_id = ?";
         return jdbcTemplate.update(sql, newStatus, apptId);
     }
+
+    /**
+     * Updates the visit summary text of an appointment.
+     */
+    public int updateAppointmentSummary(String apptId, String summary) {
+        String sql = "UPDATE Appointment SET appt_summary = ? WHERE appt_id = ?";
+        return jdbcTemplate.update(sql, summary, apptId);
+    }
+
 }

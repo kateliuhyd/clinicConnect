@@ -1,0 +1,24 @@
+<div class="container py-4">
+    <h1>Patient Management</h1>
+    <form id="patient-form" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <input type="text" id="patient-id" class="form-control" placeholder="ID" required>
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="first-name" class="form-control" placeholder="First Name" required>
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="last-name" class="form-control" placeholder="Last Name" required>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Add Patient</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr><th>ID</th><th>First</th><th>Last</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="patients-body"></tbody>
+    </table>
+</div>

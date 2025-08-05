@@ -1,61 +1,48 @@
 package edu.sjsu.dbms.clinicconnect5.model;
 
+import java.time.LocalDate;
+
 public class Doctor {
+    private String docId;
+    private String firstName;
+    private String lastName;
+    private LocalDate dob;
+    private Integer deptId;
+    private String specializationId;
+    private String specializationName;
 
-    private String doc_id;
-    private String first_name;
-    private String last_name;
-    private String location;
-    private String specialization;
+    public Doctor() {}
 
-
-    public String getDoc_id() {
-        return doc_id;
+    public Doctor(String docId, String firstName, String lastName, String specializationName) {
+        this.docId = docId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.specializationName = specializationName;
     }
 
-    public void setDoc_id(String doc_id) {
-        this.doc_id = doc_id;
-    }
+    public String getDocId() { return docId; }
+    public void setDocId(String docId) { this.docId = docId; }
 
-    public String getFirst_name() {
-        return first_name;
-    }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public String getLast_name() {
-        return last_name;
-    }
+    public LocalDate getDob() { return dob; }
+    public void setDob(LocalDate dob) { this.dob = dob; }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
+    public Integer getDeptId() { return deptId; }
+    public void setDeptId(Integer deptId) { this.deptId = deptId; }
 
+    public String getSpecializationId() { return specializationId; }
+    public void setSpecializationId(String specializationId) { this.specializationId = specializationId; }
 
-    public String getSpecialization() {
-        return specialization;
-    }
+    public String getSpecializationName() { return specializationName; }
+    public void setSpecializationName(String specializationName) { this.specializationName = specializationName; }
 
+    // Alias setter for JSON 'specialization'
     public void setSpecialization(String specialization) {
-        this.specialization = specialization;
+        this.specializationName = specialization;
     }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public Doctor(String id, String first_name, String last_name, String location, String specialization) {
-        this.doc_id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.location = location;
-        this.specialization = specialization;
-    }
-
 }

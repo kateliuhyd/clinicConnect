@@ -1,8 +1,10 @@
 package edu.sjsu.dbms.clinicconnect5.controller;
 
 
+import edu.sjsu.dbms.clinicconnect5.dao.MedicalRecordDAO;
 import edu.sjsu.dbms.clinicconnect5.dao.VisitSummaryDAO;
 import edu.sjsu.dbms.clinicconnect5.model.AppointmentDetails;
+import edu.sjsu.dbms.clinicconnect5.model.MedicalRecord;
 import edu.sjsu.dbms.clinicconnect5.model.Prescription;
 import edu.sjsu.dbms.clinicconnect5.model.Visit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import java.util.List;
 public class VisitController {
 
     private final VisitSummaryDAO visitDao;
+    @Autowired
+    private MedicalRecordDAO recordDao;
 
     public VisitController(VisitSummaryDAO visitSummaryDao) {
         this.visitDao = visitSummaryDao;
@@ -28,5 +32,17 @@ public class VisitController {
     public ResponseEntity<List<Visit>> getVisitSummary(@RequestParam("patientId") String patientId) {
         List<Visit> visits = visitDao.summaryOfVisits(patientId);
         return ResponseEntity.ok(visits);
+    }
+
+    /**
+     * Fetch this patient’s medical_record row
+     */
+
+    @GetMapping("/medical-record")
+    public ResponseEntity<MedicalRecord> getMedicalRecord(@RequestParam String patientId) {
+
+        return recordDao.findByPatientId(patientId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

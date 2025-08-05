@@ -140,5 +140,16 @@ public class AppointmentController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @PutMapping("/appointments/{id}/summary")
+    public ResponseEntity<Void> updateSummary(
+            @PathVariable("id") String apptId,
+            @RequestBody String summary) {
 
+        int updated = appointmentDao.updateAppointmentSummary(apptId, summary);
+        if (updated == 1) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }

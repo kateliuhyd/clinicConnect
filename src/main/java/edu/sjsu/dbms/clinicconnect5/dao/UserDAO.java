@@ -75,17 +75,12 @@ public class UserDAO {
                 return null;
         }
 
-        String sql = "SELECT " + idColumnName + " as id, first_name, last_name, address_line, city, state, zip_code, country FROM " + tableName + " WHERE " + idColumnName + " = ?";
+        String sql = "SELECT " + idColumnName + " as id, first_name, last_name FROM " + tableName + " WHERE " + idColumnName + " = ?";
 
         RowMapper<UserProfileResponse> rowMapper = (rs, rowNum) -> new UserProfileResponse(
                 rs.getString("id"),
                 rs.getString("first_name"),
-                rs.getString("last_name"),
-                rs.getString("address_line"),
-                rs.getString("city"),
-                rs.getString("state"),
-                rs.getString("zip_code"),
-                rs.getString("country")
+                rs.getString("last_name")
         );
 
         try {
