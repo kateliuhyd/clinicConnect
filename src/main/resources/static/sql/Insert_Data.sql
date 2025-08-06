@@ -67,8 +67,7 @@ INSERT INTO Prescription (medicine_name, prescription_date, pid, did) VALUES
     ('Lisinopril 10mg', '2025-06-19', 'pat001', 'doc102'),
     ('Amlodipine 5mg', '2025-07-20', 'pat002', 'doc101');
 
-/*
 INSERT INTO ClinicDB.Admin (admin_id,dept_id,first_name,last_name,dob) VALUES
 	 ('admin001',1,'Sarah','Newton','1970-01-01'),
 	 ('admin002',2,'Jason','Lee','1980-10-20');
- */
+
