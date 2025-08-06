@@ -60,8 +60,7 @@ CREATE TABLE Patient (
     ON DELETE CASCADE
 );
 
-
-
+/*
 CREATE TABLE Admin (
     admin_id VARCHAR(20) PRIMARY KEY,
     dept_id INT,
@@ -75,6 +74,7 @@ CREATE TABLE Admin (
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
+*/
 
 CREATE TABLE Prescription (
     pid VARCHAR(20),

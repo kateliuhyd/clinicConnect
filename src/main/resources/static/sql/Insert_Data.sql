@@ -10,8 +10,6 @@ INSERT INTO ClinicDB.Address (addr_id,address_line,city,state,zip_code,country) 
 ;
 
 INSERT INTO ClinicDB.User (user_id,password,user_type, addr_id) VALUES
-	 ('admin001','adm001','admin','addr7'),
-	 ('admin002','adm002','admin','addr8'),
 	 ('doc101','pass001','doctor','addr1'),
 	 ('doc102','pass002','doctor','addr2'),
 	 ('doc103','pass003','doctor','addr3'),
@@ -31,14 +29,11 @@ INSERT INTO ClinicDB.Department (dept_id,dept_name,dept_desc,numDoctors) VALUES
 	 (9,'ENT','Ear, Nose & Throat',3),
 	 (10,'General Medicine','Broad healthcare services',6);
 
-INSERT INTO Specialization
-    (specialization_id, specialization_name)
-VALUES
+INSERT INTO Specialization (specialization_id, specialization_name) VALUES
     ('s1', 'Family Practice'),
     ('s2', 'Electrophysiology'),
     ('s3', 'Cardiology'),
     ('s4', 'Audiology');
-
 
 INSERT INTO ClinicDB.Doctor (doc_id,first_name,last_name,dob, dept_id,specialization_id) VALUES
 	 ('doc101','John','Carter','1975-04-14',1,'s1'),
@@ -72,6 +67,8 @@ VALUES
     ('Lisinopril 10mg', '2025-06-19', 'pat001', 'doc102'),
     ('Amlodipine 5mg', '2025-07-20', 'pat002', 'doc101');
 
+/*
 INSERT INTO ClinicDB.Admin (admin_id,dept_id,first_name,last_name,dob) VALUES
 	 ('admin001',1,'Sarah','Newton','1970-01-01'),
 	 ('admin002',2,'Jason','Lee','1980-10-20');
+ */

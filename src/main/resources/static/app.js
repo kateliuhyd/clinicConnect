@@ -7,7 +7,6 @@ $(document).ready(function() {
     // --- CLIENT-SIDE ROUTER ---
     const routes = {
         '#login': 'pages/login.html',
-        '#admin': 'pages/admin.html',
         '#patient': 'pages/patient.html',
         '#doctor': 'pages/doctor.html',
         '#doctor-schedule': 'pages/doctor-schedule.html',
